@@ -9,7 +9,3 @@ class Card
         @kind = kind
     end
 end
-
-# a = Card.new
-
-# pp a
