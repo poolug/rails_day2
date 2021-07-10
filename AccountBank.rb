@@ -1,39 +1,47 @@
-class Users
-    def initialize(name, arr)
+class User
+    attr_reader :accounts
+    def initialize(name, accounts)
         @name = name
-        @arr = arr
+        valid_accounts(accounts)
+    end
+
+    def valid_accounts(accounts)
+        if accounts.class != Array || accounts.empty?
+            raise "\nDebes ingresar una cuenta válida\nIngresaste: #{accounts}"
+        else
+            @accounts = accounts
+        end
+    end
+
+    def total_balance
+        self.accounts.map {|a| a.balance}.sum
     end
 end
 
 class BankAccount
-    attr_accessor :bank_name, :account, :balance
+    attr_accessor :balance
+    attr_reader :bank_name, :account
     def initialize(bank_name, account, balance = 0)
         @bank_name = bank_name
         @account = account
         @balance = balance
-        transfer(account, balance)
     end
 
-    # attr_accessor :account2, :balance2
     def transfer(account2, balance2)
-        @account2 = account2
-        @balance2 = balance2
-
-        @balance -= @balance
-        @balance2 += @balance2
+        self.balance -= self.balance
+        account2.balance += balance2
     end
-
-    # def total_balance
-    #     "a: #{self.balance}, b: #{self.balance2}"
-    # end
+    def to_s
+        self.balance
+    end
 end
 
-c1 = BankAccount.new('Santander', "cta1", 5000)
-# c1.transfer
+account1 = BankAccount.new('Santander', 'Ahorro', 5000)
+account2 = BankAccount.new('Santander', 'Corriente', 5000)
+account1.transfer(account2, 5000)
 
-c2 = BankAccount.new('Santander', "cta4", 5000)
-# c2.transfer("cta2", 5000)
+user = User.new('juan', [account1, account2])
 
-puts "Nombre: #{c1.bank_name}, Cta: #{c1.account}, Saldo: #{c1.balance}"
-puts "Nombre: #{c2.bank_name}, Cta: #{c2.account2}, Saldo: #{c2.balance2}"
-# puts c1.total_balance
+puts "Banco: #{account1.bank_name}, Cta: #{account1.account}, Saldo: #{account1.to_s}"
+puts "Banco: #{account2.bank_name}, Cta: #{account2.account}, Saldo: #{account2.to_s}"
+puts "El saldo del usuario es: #{user.total_balance}"
